@@ -75,7 +75,7 @@ class StanceScreen(Screen):
         img_dir = './images'
         files = os.listdir(img_dir)
 
-        num = self.time_limit//self.INTERVAL
+        num = self.time_limit//3
 
         for f in range(0, num):
             random_stance = random.choice(files)
