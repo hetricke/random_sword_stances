@@ -1,7 +1,7 @@
 [app]
 
 # (str) Title of your application
-title = Random Sword Stances
+title = RandomSwordStances
 
 # (str) Package name
 package.name = randomswordstances
