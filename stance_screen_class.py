@@ -42,9 +42,11 @@ class StanceScreen(Screen):
 
         elif self.stance_num is not -1:
             self.stance()
+            self.stance_num = -1
 
         elif self.time_limit is not -1:
             self.time()
+            self.time_limit = -1
 
         else:
             print("UNKNOWN ERROR")
@@ -59,6 +61,11 @@ class StanceScreen(Screen):
         self.manager.get_screen('stance_input_screen').stance_input.text = "-1"
         self.manager.get_screen('time_input_screen').time_input.text = "-1"
         self.manager.current = 'start_screen'
+        self.i = -1
+        self.stances = []
+        self.titles = []
+        self.cur_stance = None
+        self.cur_title = None
     
 
     def stance(self):
@@ -109,6 +116,9 @@ class StanceScreen(Screen):
 
             item_layout.add_widget(title_label)
             item_layout.add_widget(stance_img)
+            item_layout.add_widget(back_button)
+
+            self.add_widget(item_layout)
             
 
         else:
@@ -119,8 +129,9 @@ class StanceScreen(Screen):
             title_label = Label()
             title_label.canvas.add(Rectangle(texture=title_texture, size=title_size))
             item_layout.add_widget(title_label)
+            item_layout.add_widget(back_button)
+            self.add_widget(item_layout)
+            return False
 
 
-        item_layout.add_widget(back_button)
 
-        self.add_widget(item_layout)
