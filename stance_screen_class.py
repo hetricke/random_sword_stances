@@ -29,13 +29,16 @@ class StanceScreen(Screen):
 		
 
     def on_enter(self):
+
+        #resets the list of stances/titles to empty
         self.stances = []
         self.titles = []
             
+        #Retrieves the number of stances and the time limit from the other screens
         self.stance_num = int(self.manager.get_screen('stance_input_screen').stance_input.text)
         self.time_limit = int(self.manager.get_screen('time_input_screen').time_input.text)
 
-
+        #Checks if the user set the number of stances or the length of time
         if self.stance_num == -1 and self.time_limit == -1:
             print("ERROR: NEITHER STANCE OR TIME INPUT")
             self.manager.current = 'start_screen'
@@ -52,11 +55,12 @@ class StanceScreen(Screen):
             print("UNKNOWN ERROR")
             self.manager.current = 'start_screen'
 
+        #Iterates through different stances on a 3 second interval
         Clock.schedule_once(self.updateStance)
         Clock.schedule_interval(self.updateStance, 3)
 
 
-
+    #Resets values and navigates the user back to the start screen
     def startNav(self, *args):
         self.manager.get_screen('stance_input_screen').stance_input.text = "-1"
         self.manager.get_screen('time_input_screen').time_input.text = "-1"
@@ -67,7 +71,7 @@ class StanceScreen(Screen):
         self.cur_stance = None
         self.cur_title = None
     
-
+    #creates the list of stances if the user set the number of stances
     def stance(self):
         img_dir = './images'
         files = os.listdir(img_dir)
@@ -78,6 +82,7 @@ class StanceScreen(Screen):
             self.stances.append(img_dir+'/'+random_stance)
             self.titles.append(title)
 
+    #creates the list of stances if the user set a timer
     def time(self):
         img_dir = './images'
         files = os.listdir(img_dir)
@@ -89,11 +94,13 @@ class StanceScreen(Screen):
             title = random_stance[:-4]
             self.stances.append(img_dir+'/'+random_stance)
             self.titles.append(title)
-    
+
+
+    #Changes the displayed stances by iterating through the stances list
     def updateStance(self, *args):
         self.clear_widgets()
 
-        item_layout = GridLayout(cols = 1, rows = 3)
+        item_layout = GridLayout(cols = 1)
         back_button = Button(text = 'Back to Start', size_hint_x = 0.5, width=50, size_hint_y = 0.1, height = 90)
         back_button.bind(on_press = self.startNav)
 
@@ -103,15 +110,8 @@ class StanceScreen(Screen):
             self.i += 1
             self.cur_stance = self.stances[self.i]
             self.cur_title = self.titles[self.i]
-
-
-            title = CoreLabel(text= self.cur_title, font_size=20, color=(1, 0, 0, 1), )
-            title.refresh()
-            title_texture = title.texture
-            title_size = list(title.size)
-            title_label = Label()
-            title_label.canvas.add(Rectangle(texture=title_texture, pos_hint = {'top' : 1}))
             
+            title_label = Label(text=self.cur_title, pos_hint={'center_x': 0.5, 'center_y': .9})
             stance_img = Image(source = self.cur_stance, fit_mode = "contain", size_hint_y = 1)
 
             item_layout.add_widget(title_label)
@@ -122,12 +122,7 @@ class StanceScreen(Screen):
             
 
         else:
-            title = CoreLabel(text= "COMPLETE", font_size=20, color=(1, 0, 0, 1))
-            title.refresh()
-            title_texture = title.texture
-            title_size = list(title.size)
-            title_label = Label()
-            title_label.canvas.add(Rectangle(texture=title_texture, size=title_size))
+            title_label = Label(text= "COMPLETE", pos_hint={'center_x': 0.5, 'center_y': .9})
             item_layout.add_widget(title_label)
             item_layout.add_widget(back_button)
             self.add_widget(item_layout)
