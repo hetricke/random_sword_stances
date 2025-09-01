@@ -5,10 +5,9 @@ import random
 from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
-from kivy.core.text import Label as CoreLabel
 from kivy.uix.label import Label
-from kivy.graphics import Rectangle
 from kivy.clock import Clock
 
 
@@ -101,8 +100,14 @@ class StanceScreen(Screen):
         self.clear_widgets()
 
         item_layout = GridLayout(cols = 1)
-        back_button = Button(text = 'Back to Start', size_hint_x = 0.5, width=50, size_hint_y = 0.1, height = 90)
+        button_layout = FloatLayout()
+
+        back_button = Button(text = 'Back to Start',
+                            size_hint =(.5, .25),
+                            pos_hint ={"center_x":0.5,"center_y":0.5})
         back_button.bind(on_press = self.startNav)
+
+        button_layout.add_widget(back_button)
 
         
 
@@ -110,21 +115,23 @@ class StanceScreen(Screen):
             self.i += 1
             self.cur_stance = self.stances[self.i]
             self.cur_title = self.titles[self.i]
-            
-            title_label = Label(text=self.cur_title, pos_hint={'center_x': 0.5, 'center_y': .9})
+
+            title_label = Label(text=self.cur_title, font_size='40sp')
             stance_img = Image(source = self.cur_stance, fit_mode = "contain", size_hint_y = 1)
 
             item_layout.add_widget(title_label)
             item_layout.add_widget(stance_img)
-            item_layout.add_widget(back_button)
+            item_layout.add_widget(button_layout)
 
             self.add_widget(item_layout)
             
 
         else:
-            title_label = Label(text= "COMPLETE", pos_hint={'center_x': 0.5, 'center_y': .9})
+            title_label = Label(text= "COMPLETE", font_size='50sp')
+            instructions_label = Label(text="Press Back to Start", font_size='30sp')
             item_layout.add_widget(title_label)
-            item_layout.add_widget(back_button)
+            item_layout.add_widget(instructions_label)
+            item_layout.add_widget(button_layout)
             self.add_widget(item_layout)
             return False
 
